@@ -1,0 +1,11 @@
+{
+  "name": "codecurrent",
+  "version": "1.0.0",
+  "description": "Your DSA Buddy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pratul Kumar - Soumil Khandelwal",
+  "license": "ISC"
+}
