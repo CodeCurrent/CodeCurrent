@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const validator = require('validator')
 
 mongoose.connect('mongodb://127.0.0.1:27017/codecurrent-db',{
     useNewUrlParser : true,
@@ -7,29 +8,56 @@ mongoose.connect('mongodb://127.0.0.1:27017/codecurrent-db',{
 })
 
 const USERS = mongoose.model('Users',{
-    name:{
-        type : String 
+    name: {
+        type : String ,
+        required : true,
+        trim : true
     },
-    email:{
+    email: {
+        type : String ,
+        required : true,
+        trim : true,
+        lowercase : true,
+        unique : true,
+        validate(email){
+            if(!validator.isEmail(email)){
+                throw new Error('Email is Invalid')
+            }
+        }
+    },
+    password: {
+        type : String ,
+        required : true,
+        minlength: 8,
+        maxlength: 20
+    },
+    codechef: {
+        type : String ,
+        required : true,
+        validate(codechef_user_url){
+            if(!validator.isURL(codechef_user_url)){
+                throw new Error('Not a valid URL')
+            }
+        }
+    },
+    education: {
         type : String
     },
-    password:{
-        type : String
-    },
-    codechef:{
-        type : String
-    },
-    education:{
-        type : String
-    },
-    age:{
+    age: {
         type : Number
+    },
+    phone: {
+        type : String
+    },
+    first_login: {
+        type: Date,
+        default: Date.now 
     }
 })
 
 const me = new USERS({
-    name : 'Pratul Kumar',
-    email : 'pratulkumar1997@gmail.com',
+    name : 'Pratul Kumar   ',
+    email : '  pratulkumar1997@gmail.com',
     password : 'pratulkumar',
     codechef : "codechef",
     education : "The LNM Institute of Information Technology",
