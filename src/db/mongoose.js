@@ -29,11 +29,13 @@ const USERS = mongoose.model('Users',{
         type : String ,
         required : true,
         minlength: 8,
-        maxlength: 20
+        maxlength: 20,
+        trim : true
     },
     codechef: {
         type : String ,
         required : true,
+        trim : true,
         validate(codechef_user_url){
             if(!validator.isURL(codechef_user_url)){
                 throw new Error('Not a valid URL')
@@ -41,13 +43,14 @@ const USERS = mongoose.model('Users',{
         }
     },
     education: {
-        type : String
+        type : String,
+        trim: true
     },
-    age: {
-        type : Number
+    date_of_birth: {
+        type : Date
     },
     phone: {
-        type : String
+        type : String,
     },
     first_login: {
         type: Date,
@@ -55,13 +58,15 @@ const USERS = mongoose.model('Users',{
     }
 })
 
+
+
 const me = new USERS({
-    name : 'Pratul Kumar   ',
-    email : '  pratulkumar1997@gmail.com',
+    name : 'pratul kumar   ',
+    email : '  pratulkumar199@gmail.com',
     password : 'pratulkumar',
-    codechef : "codechef",
+    codechef : "https://www.codechef.com/users/pratul1997",
     education : "The LNM Institute of Information Technology",
-    age : 22
+    date_of_birth : '1999-06-02'
 }).save().then((me) =>{
     console.log(me)
 }).catch((error) => {
@@ -70,25 +75,28 @@ const me = new USERS({
 
 
 const QUESTIONS = mongoose.model('questions',{
-    url : {
+    question_url : {
         type : String
     },
-    name : {
-        type : String
+    question_name : {
+        type : String,
+        trim: true
     },
-    platform : {
-        type : String
+    question_platform : {
+        type : String,
+        trim: true
     },
-    stars : {
-        type : Number
+    question_stars : {
+        type : Number,
+        default: 0 
     }
 })
 
 const q1 = new QUESTIONS({
-    url : "https://leetcode.com/problems/solve-the-equation/",
-    name : "Solve the equation",
-    platform : "Leetcode",
-    stars: 0
+    question_url : "https://leetcode.com/problems/solve-the-equation/",
+    question_name : "Solve the equation",
+    question_platform : "Leetcode",
+    question_stars: 0
 }).save().then((q1)=>{
     console.log(q1)
 }).catch((error) =>{
