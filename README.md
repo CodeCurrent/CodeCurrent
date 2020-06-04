@@ -1,5 +1,6 @@
 # CodeCurrent
 ## What we do?
+
 Codecurrent is aiming to turn into a CP buddy for you, in today's time we see several coding platforms, let it be Leetcode, CodeChef, Codeforces, Spoj, HackerRank, HackerEarth etc. Each one of us is confused which platform to follow, because we all feel that somehow some questions in each platform are sharing the same coding paradigm. People keep on bouncing among platforms in search of good questions and a proper problem set to make their logics strong and eventually end up wasting a lot of time and energy. Here we come to your aid, we do all that is needed to keep you focussed in enhancing your DSA skills.
 
 - We try to build a probelm ladder for you from all these platforms together where you can find most optimized question sets based on their difficulty, applied concepts and topics.
