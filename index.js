@@ -13,9 +13,9 @@ app.use(bodyParser.json())
 
 app.get('/users', (req,res) => {
     USER.find({}).then((users) => {
-        res.send(users)
+        res.status(200).send(users)
     }).catch((error) => {
-        res.send(error)
+        res.status(404).send(error)
     })
 })
 
@@ -26,7 +26,7 @@ app.get('/users/:check_email', (req,res) => {
         if(!user){
             return res.status(404).json({
                 status: 'error',
-                error: 'User does not Exist',
+                error: 'User does not Exist'
               }).send()
         }
         res.send(user)
@@ -44,6 +44,30 @@ app.post('/users', (req,res) => {
         })
 })
 
+
+
+
+app.get('/questions',(req,res) => {
+    QUESTION.find({}).then((questions) => {
+        res.status(200).send(questions)
+    }).catch((error) => {
+        res.status(404).send(error)
+    })
+})
+
+app.get('/questions/:id',(req,res) => {
+    QUESTION.findById(req.params.id).then((question) => {
+        if(!question){
+            return res.status(404).json({
+                status: 'error',
+                error: 'Question not present'
+            }).send()
+        }
+        res.status(200).send(question)
+    }).catch((error) => {
+        res.status(404).send(error)
+    })
+})
 
 
 app.post('/questions', (req,res) => {
