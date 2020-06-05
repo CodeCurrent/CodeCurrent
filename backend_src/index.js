@@ -1,10 +1,10 @@
-const {error, success, warning } = require("./src/statics/chalk.color")
+const {error, success, warning } = require("./statics/chalk.color")
 const express = require("express")
 const bodyParser = require('body-parser')
-require("./src/db/mongoose")
+require("./db/mongoose")
 
-const USER = require("./src/models/user.model")
-const QUESTION = require("./src/models/question.model")
+const USER = require("./models/user.model")
+const QUESTION = require("./models/question.model")
 
 const app = express()
 const port = process.env.PORT || 3000

@@ -1,0 +1,1 @@
+require("./backend_src/index")
