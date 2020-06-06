@@ -30,7 +30,7 @@ app.get('/users/:check_email', async (req, res) => {
                 error: 'User does not Exist'
               }).send()
         }
-        res.send(user)
+        res.status(200).send(user)
     } catch(error) {
         res.status(500).send(error)
     }
@@ -42,6 +42,39 @@ app.post('/users', async (req, res) => {
         await user.save()
         res.status(201).send(user)
     } catch(error) {
+        res.status(400).send(error)
+    }
+})
+
+app.patch('/users/:update_email', async(req, res) => {
+
+    const updates_happening_req = Object.keys(req.body)
+    const allowedUpdates = ['name', 'password', 'education', 'date_of_birth', 'phone']
+    const isValidOperation = updates_happening_req.every((update_happening_req) => {
+        return allowedUpdates.includes(update_happening_req)
+    })
+
+    if(!isValidOperation) {
+        return res.status(400).json({
+            "status" : "error",
+            "error" : 'This item cannot be updated'
+        }).send()
+    }
+
+    try {
+        const user = await USER.findOneAndUpdate(
+            {email : req.params.update_email},
+            req.body,
+            {new : true, runValidators : true
+        })
+        if(!user){
+            return res.status(404).json({
+                status: 'error',
+                error: 'User does not Exist'
+              }).send()
+        }
+        res.status(200).send(user)
+    } catch (error) {
         res.status(400).send(error)
     }
 })
