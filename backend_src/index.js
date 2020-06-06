@@ -11,18 +11,19 @@ const port = process.env.PORT || 3000
 
 app.use(bodyParser.json())
 
-app.get('/users', (req,res) => {
-    USER.find({}).then((users) => {
+
+app.get('/users', async (req, res) => {
+    try {
+        users = await USER.find({})
         res.status(200).send(users)
-    }).catch((error) => {
-        res.status(404).send(error)
-    })
+    } catch(error) {
+        res.status(500).send(error) 
+    }
 })
 
-app.get('/users/:check_email', (req,res) => {
-    USER.findOne({
-        email : req.params.check_email
-    }).then((user) => {
+app.get('/users/:check_email', async (req, res) => {
+    try {
+        const user = await USER.findOne({ email : req.params.check_email })
         if(!user){
             return res.status(404).json({
                 status: 'error',
@@ -30,33 +31,36 @@ app.get('/users/:check_email', (req,res) => {
               }).send()
         }
         res.send(user)
-    }).catch((error) => {
-        res.status(404).send(error)
-    })
+    } catch(error) {
+        res.status(500).send(error)
+    }
 })
 
-app.post('/users', (req,res) => {
+app.post('/users', async (req, res) => {
     const user = new USER(req.body)
-    user.save().then((user) => {
-            res.status(201).send(user)
-        }).catch((error) => {
-            res.status(400).send(error)
-        })
+    try{
+        await user.save()
+        res.status(201).send(user)
+    } catch(error) {
+        res.status(400).send(error)
+    }
 })
 
 
 
 
-app.get('/questions',(req,res) => {
-    QUESTION.find({}).then((questions) => {
+app.get('/questions',async (req, res) => {
+    try{
+        const questions = await QUESTION.find({})
         res.status(200).send(questions)
-    }).catch((error) => {
-        res.status(404).send(error)
-    })
+    } catch(error) {
+        res.status(500).send(error)
+    }
 })
 
-app.get('/questions/:id',(req,res) => {
-    QUESTION.findById(req.params.id).then((question) => {
+app.get('/questions/:id', async(req, res) => {
+    try{
+        const question = await QUESTION.findById(req.params.id)
         if(!question){
             return res.status(404).json({
                 status: 'error',
@@ -64,21 +68,22 @@ app.get('/questions/:id',(req,res) => {
             }).send()
         }
         res.status(200).send(question)
-    }).catch((error) => {
-        res.status(404).send(error)
-    })
+    } catch(error) {
+        res.status(500).send(error)
+    }
 })
 
 
-app.post('/questions', (req,res) => {
+app.post('/questions', async (req,res) => {
     const question = new QUESTION(req.body)
-    question.save().then((question) => {
+    try {
+        await question.save()
         res.status(201).send(question)
-    }).catch((error) => {
+    } catch(error) {
         res.status(400).send(error)
-    })
+    }
 })
 
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log(warning('Server is running on port ' + port))
 })
