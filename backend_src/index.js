@@ -65,8 +65,8 @@ app.patch('/users/:update_email', async(req, res) => {
         const user = await USER.findOneAndUpdate(
             {email : req.params.update_email},
             req.body,
-            {new : true, runValidators : true
-        })
+            {new : true, runValidators : true}
+        )
         if(!user){
             return res.status(404).json({
                 status: 'error',
@@ -113,6 +113,40 @@ app.post('/questions', async (req,res) => {
         await question.save()
         res.status(201).send(question)
     } catch(error) {
+        res.status(400).send(error)
+    }
+})
+
+app.patch('/questions/:id', async (req, res) => {
+
+    const updates_happening_req = Object.keys(req.body)
+    const allowedUpdates = ['question_name', 'question_platform']
+    const isValidOperation = updates_happening_req.every((update_happening_req) => {
+        return allowedUpdates.includes(update_happening_req)
+    })
+
+    if(!isValidOperation) {
+        return res.status(400).json({
+            "status" : "error",
+            "error" : 'This item cannot be updated'
+        }).send()
+    }
+
+    try {
+    const question = await QUESTION.findOneAndUpdate(
+        { _id : req.params.id },
+        req.body,
+        { new : true, runValidators : true }
+    )
+    
+    if(!question){
+            return res.status(404).json({
+                status: 'error',
+                error: 'Question does not Exist'
+              }).send()
+        }
+        res.status(200).send(question)
+    } catch (error) {
         res.status(400).send(error)
     }
 })
