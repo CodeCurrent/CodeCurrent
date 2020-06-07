@@ -79,6 +79,20 @@ app.patch('/users/:update_email', async(req, res) => {
     }
 })
 
+app.delete('/users/:delete_email', async (req, res) => {
+    try{
+        user = await USER.findOneAndDelete({email : req.params.delete_email})
+        if(!user){
+            res.status(404).json({
+                status: 'error',
+                error: 'USER does not Exist'
+              }).send()
+        }
+        res.status(200).send(user)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
 
 
 
