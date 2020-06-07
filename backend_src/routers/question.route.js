@@ -57,11 +57,13 @@ router.patch('/questions/:id', async (req, res) => {
     }
 
     try {
-    const question = await QUESTION.findOneAndUpdate(
-        { _id : req.params.id },
-        req.body,
-        { new : true, runValidators : true }
-    )
+
+        const question = await QUESTION.findById(req.params.id)
+        updates_happening_req.forEach((update_happening_req) => {
+            return question[update_happening_req] = req.body[update_happening_req]
+        })
+
+        await question.save()
     
     if(!question){
             return res.status(404).json({

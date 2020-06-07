@@ -54,13 +54,14 @@ router.patch('/users/:update_email', async(req, res) => {
             "error" : 'This item cannot be updated'
         }).send()
     }
-
     try {
-        const user = await USER.findOneAndUpdate(
-            {email : req.params.update_email},
-            req.body,
-            {new : true, runValidators : true}
-        )
+        const user = await USER.findOne({email : req.params.update_email})
+        updates_happening_req.forEach((update_happening_req) => {
+            return user[update_happening_req] = req.body[update_happening_req]
+        })
+
+        await user.save()
+
         if(!user){
             return res.status(404).json({
                 status: 'error',
