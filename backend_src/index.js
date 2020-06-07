@@ -96,6 +96,8 @@ app.delete('/users/:delete_email', async (req, res) => {
 
 
 
+
+
 app.get('/questions',async (req, res) => {
     try{
         const questions = await QUESTION.find({})
@@ -162,6 +164,21 @@ app.patch('/questions/:id', async (req, res) => {
         res.status(200).send(question)
     } catch (error) {
         res.status(400).send(error)
+    }
+})
+
+app.delete('/questions/:id', async (req, res) => {
+    try{
+        question = await QUESTION.findOneAndDelete({_id : req.params.id})
+        if(!question){
+            res.status(404).json({
+                status: 'error',
+                error: 'QUESTION does not Exist'
+              }).send()
+        }
+        res.status(200).send(question)
+    } catch (error) {
+        res.status(500).send(error)
     }
 })
 
