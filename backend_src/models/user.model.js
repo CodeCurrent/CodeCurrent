@@ -26,7 +26,6 @@ const userSchema = new mongoose.Schema(
             type : String ,
             required : true,
             minlength: 8,
-            maxlength: 20,
             trim : true
         },
         codechef: {
@@ -52,13 +51,21 @@ const userSchema = new mongoose.Schema(
         first_login: {
             type: Date,
             default: Date.now 
-        }
+        },
+        tokens: [{
+            token:{
+                type: String,
+                required: true
+            }
+        }]
     }
 )
 
 userSchema.methods.generateAuthToken = async function (){
     const user = this
-    const token = jwt.sign({user: user.email},'Pratul1997')
+    const token = jwt.sign({email : user.email}, 'Pratul1997', {expiresIn: '14d'})
+    user.tokens = user.tokens.concat({token})
+    await user.save()
     return token
 }
 
