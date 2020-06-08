@@ -40,6 +40,16 @@ router.post('/users', async (req, res) => {
     }
 })
 
+
+router.post('/users/login', async (req, res) => {
+    try{
+        const user = await USER.findByCredentials(req.body.email, req.body.password)
+        res.send(user)
+    } catch (error) {
+        res.status(400).send()
+    }
+})
+
 router.patch('/users/:update_email', async(req, res) => {
 
     const updates_happening_req = Object.keys(req.body)
