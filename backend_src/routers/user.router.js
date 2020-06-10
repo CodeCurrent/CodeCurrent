@@ -1,21 +1,17 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const USER = require('../models/user.model')
+const auth = require('../middlewares/auth')
 
 const router = new express.Router()
 
 router.use(bodyParser.json())
 
-router.get('/users', async (req, res) => {
-  try {
-    const users = await USER.find({})
-    res.status(200).send(users)
-  } catch (error) {
-    res.status(500).send(error)
-  }
+router.get('/users/me', auth, async (req, res) => {
+  res.status(200).send(req.user)
 })
 
-router.get('/users/:check_email', async (req, res) => {
+router.get('/users/:check_email', auth, async (req, res) => {
   try {
     const user = await USER.findOne({ email: req.params.check_email })
     if (!user) {
@@ -30,7 +26,7 @@ router.get('/users/:check_email', async (req, res) => {
   }
 })
 
-router.post('/users', async (req, res) => {
+router.post('/users/signup', async (req, res) => {
   const user = new USER(req.body)
   try {
     await user.save()
@@ -54,7 +50,7 @@ router.post('/users/login', async (req, res) => {
   }
 })
 
-router.patch('/users/:update_email', async (req, res) => {
+router.patch('/users/:update_email', auth, async (req, res) => {
   const updatesHappeningReq = Object.keys(req.body)
   const allowedUpdates = ['name', 'password', 'education', 'date_of_birth', 'phone']
   const isValidOperation = updatesHappeningReq.every((updateHappeningReq) => {
@@ -87,7 +83,7 @@ router.patch('/users/:update_email', async (req, res) => {
   }
 })
 
-router.delete('/users/:delete_email', async (req, res) => {
+router.delete('/users/:delete_email', auth, async (req, res) => {
   try {
     const user = await USER.findOneAndDelete({ email: req.params.delete_email })
     if (!user) {

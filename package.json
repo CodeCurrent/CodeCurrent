@@ -7,7 +7,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "lint": "eslint \"backend_src/**/*.js\" --fix",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "repository": {
     "type": "git",
